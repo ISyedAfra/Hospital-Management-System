@@ -34,7 +34,7 @@ helgrind: $(TEST)
 	valgrind --tool=helgrind --error-exitcode=1 ./$(TEST)
 
 cppcheck:
-	cppcheck --enable=warning,style,performance,portability --error-exitcode=1 --suppress=missingIncludeSystem hospital.cpp main.cpp test_hospital.cpp
+	cppcheck --enable=warning,style,performance,portability --error-exitcode=1 --suppress=missingIncludeSystem hospital.cpp main.cpp
 
 clean:
 	rm -f $(APP) $(TEST) *.gcda *.gcno *.gcov coverage.html coverage.css

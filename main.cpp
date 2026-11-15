@@ -28,17 +28,17 @@ int askInt(const string &p)
 }
 void patients(const HospitalSystem &h)
 {
-    for (const auto p : h.getPatients())
+    for (const auto &p : h.getPatients())
         cout << p.id << " " << p.name << " " << p.age << " " << p.gender << " " << p.phone << "\n";
 }
 void doctors(const HospitalSystem &h)
 {
-    for (const auto d : h.getDoctors())
+    for (const auto &d : h.getDoctors())
         cout << d.id << " " << d.name << " " << d.specialization << " " << d.phone << "\n";
 }
 void appointments(const HospitalSystem &h)
 {
-    for (const auto a : h.getAppointments())
+    for (const auto &a : h.getAppointments())
         cout << a.id << " " << a.patientName << " " << a.doctorName << " " << a.dateTime << " " << a.status << "\n";
 }
 void addPatient(HospitalSystem &h)
@@ -74,7 +74,7 @@ void admin(HospitalSystem &h)
         }
         else if (c == 2)
         {
-            for (const auto u : h.getUsers())
+            for (const auto &u : h.getUsers())
                 cout << u.id << " " << u.username << " " << u.role << "\n";
         }
         else if (c == 3)

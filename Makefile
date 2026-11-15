@@ -17,7 +17,7 @@ run: $(APP)
 	./$(APP)
 
 $(TEST): test_hospital.cpp hospital.cpp hospital.h
-	$(CXX) $(CXXFLAGS) $(COVERAGE) -o $(TEST) test_hospital.cpp hospital.cpp -lgtest $(LIBS)
+	$(CXX) $(CXXFLAGS) $(COVERAGE) -o $(TEST) test_hospital.cpp hospital.cpp -lgtest -lgtest_main $(LIBS)
 
 test: $(TEST)
 	./$(TEST)

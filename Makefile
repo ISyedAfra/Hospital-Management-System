@@ -3,25 +3,38 @@ CXXFLAGS = -std=c++17 -Wall -Wextra -Wpedantic
 LIBS = -lsqlite3 -lcrypto
 COVERAGE = --coverage -O0 -g
 
-.PHONY: all run test coverage clean
-all: hospital
+APP = hospital
+TEST = hospital_tests
 
-hospital: main.cpp hospital.cpp hospital.h
-	$(CXX) $(CXXFLAGS) -o $@ main.cpp hospital.cpp $(LIBS)
+.PHONY: all run test coverage valgrind helgrind cppcheck clean
 
-run: hospital
-	./hospital
+all: $(APP)
 
-hospital_tests: test_hospital.cpp hospital.cpp hospital.h
-	$(CXX) $(CXXFLAGS) $(COVERAGE) -o $@ test_hospital.cpp hospital.cpp -lgtest $(LIBS)
+$(APP): main.cpp hospital.cpp hospital.h
+	$(CXX) $(CXXFLAGS) -o $(APP) main.cpp hospital.cpp $(LIBS)
 
-test: hospital_tests
-	./hospital_tests
+run: $(APP)
+	./$(APP)
 
-coverage: hospital_tests
-	./hospital_tests
+$(TEST): test_hospital.cpp hospital.cpp hospital.h
+	$(CXX) $(CXXFLAGS) $(COVERAGE) -o $(TEST) test_hospital.cpp hospital.cpp -lgtest $(LIBS)
+
+test: $(TEST)
+	./$(TEST)
+
+coverage: $(TEST)
+	./$(TEST)
 	gcovr --root . --filter 'hospital\.cpp$$' --html-details -o coverage.html
 	gcovr --root . --filter 'hospital\.cpp$$' --print-summary
 
+valgrind: $(TEST)
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(TEST)
+
+helgrind: $(TEST)
+	valgrind --tool=helgrind --error-exitcode=1 ./$(TEST)
+
+cppcheck:
+	cppcheck --enable=warning,style,performance,portability --error-exitcode=1 --suppress=missingIncludeSystem hospital.cpp main.cpp test_hospital.cpp
+
 clean:
-	rm -f hospital hospital_tests *.gcda *.gcno *.gcov coverage.html coverage.css
+	rm -f $(APP) $(TEST) *.gcda *.gcno *.gcov coverage.html coverage.css
